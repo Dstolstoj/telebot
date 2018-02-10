@@ -30,7 +30,7 @@ class BotHandler:
 
         return last_update
 
-greet_bot = BotHandler(token)
+greet_bot = BotHandler('511531562:AAF8KDn_-CETUMNobPkatunhbVbIGHouy-g')
 greetings = ('здравствуй', 'привет', 'ку', 'здорово')
 now = datetime.datetime.now()
 
@@ -69,6 +69,10 @@ if __name__ == '__main__':
         main()
     except KeyboardInterrupt:
         exit()
+
+
+
+
 
 
 
