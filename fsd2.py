@@ -1,19 +1,38 @@
-# -*- coding: utf-8 -*-
-from telegram.ext import Updater         # пакет называется python-telegram-bot, но Python-
-from telegram.ext import CommandHandler  # модуль почему-то просто telegram ¯\_(ツ)_/¯
+import requests
+from time import sleep
 
-def start(bot, update):
-    # подробнее об объекте update: https://core.telegram.org/bots/api#update
-    bot.sendMessage(chat_id=update.message.chat_id, text="Здравствуйте.")
+url = "https://api.telegram.org/bot511531562:AAF8KDn_-CETUMNobPkatunhbVbIGHouy-g/"
 
-updater = Updater(token='TOKEN')  # тут токен, который выдал вам Ботский Отец!
 
-start_handler = CommandHandler('start', start)  # этот обработчик реагирует
-                                                # только на команду /start
+def get_updates_json(request):
+    response = requests.get(request + 'getUpdates')
+    return response.json()
 
-updater.dispatcher.add_handler(start_handler)   # регистрируем в госреестре обработчиков
-updater.start_polling()  # поехали!
 
+def last_update(data):
+    results = data['result']
+    total_updates = len(results) - 1
+    return results[total_updates]
+
+def get_chat_id(update):
+    chat_id = update['message']['chat']['id']
+    return chat_id
+
+def send_mess(chat, text):
+    params = {'chat_id': chat, 'text': text}
+    response = requests.post(url + 'sendMessage', data=params)
+    return response
+
+def main():
+    update_id = last_update(get_updates_json(url))['update_id']
+    while True:
+        if update_id == last_update(get_updates_json(url))['update_id']:
+           send_mess(get_chat_id(last_update(get_updates_json(url))), 'Привет, собака')
+           update_id += 1
+        sleep(1)
+
+if __name__ == '__main__':
+    main()
 
 
 
