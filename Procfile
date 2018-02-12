@@ -1,1 +1,1 @@
-web: python fsd2.py
+worker: python fsd2.py
